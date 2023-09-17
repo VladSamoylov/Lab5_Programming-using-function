@@ -1,4 +1,5 @@
 #include "iostream"
+#include "math.h"
 
 using namespace std;
 
@@ -44,6 +45,32 @@ float CheckFloatValue(float* i) {
 	}
 }
 
+/**
+ * @brief Перевіряє мінімальний розмір матриці
+ * @param n Кількість рядків
+ * @param m Кількість стовпців
+ * @return Коректний розмір матриці
+*/
+pair<int, int> CheckMinMembersOfMatrix(int* n, int* m) {
+
+	if (*n < 2) {
+		cout << "You enter wrong data! Please enter colums (min members - 2): \n";
+		cin >> *n;
+		*n = CheckIntValue(&*n);
+	}
+	if (*m < 2) {
+		cout << "You enter wrong data! Please enter rows (min members - 2): \n";
+		cin >> *m;
+		*m = CheckIntValue(&*m);
+	}
+	return make_pair(*n, *m);
+}
+
+/**
+ * @brief Шукакає sign від числа заданого користувачем
+ * @param a Число задане користувачем
+ * @return Sign від числа а
+*/
 int FucntionOfSignA(int* a) {
 
 	if (*a < 0) {
@@ -58,9 +85,105 @@ int FucntionOfSignA(int* a) {
 	return *a;
 }
 
+/**
+ * @brief Знаходить суму двох чисел
+ * @param a Перше число 
+ * @param b Друге число 
+ * @return Сума першого і другого числа
+*/
 int AmountOfAandB(int* a, int* b) {
 
 	return *a + *b;
+}
+
+/**
+ * @brief Створення і заповнення матриці згідно формули
+ * @param n Кількість рядків матриці
+ * @param m Кількість стовпів матриці
+ * @return Створена матриця
+*/
+double** CreatedAndFillMatrix(int* n, int* m) {
+	double** matrix = new  double*[*n];
+
+	for (int i = 0; i < *n; i++) {
+		matrix[i] = new double[*m];
+	}
+	for (int i = 0; i < *n; i++) {
+		for (int j = 0; j < *m; j++) {
+			if (i != j) {
+				matrix[i][j] = asin((i - j + 3) / 15) + pow(-0.75, i + 2) * log10(abs((5 * i - j) / (pow(i, 2) - pow(j, 3))) + 2);
+				
+			}
+			else {
+				matrix[i][j] = log(i + 0.5 * j - 1);
+			}
+		}
+	}
+	cout << "Matrix: \n";
+	for (int i = 0; i < *n; i++) {
+		for (int j = 0; j < *m; j++) {
+			cout << matrix[i][j] << '|';
+		}
+		cout << endl;
+	}
+	return matrix;
+}
+
+/**
+ * @brief Повертає вектор сформований з елементів побічної діагоналі матриці, піднесених у квадрат
+ * @param matrix Матриця для формування вектору
+ * @param n Кількість елементів побічної діагоналі матриці
+ * @return Сформований вектор
+*/
+double* ReturnVectorRaisedSquare(double** matrix, int* n) {
+	double* vector = new double[*n];
+
+	for (int i = 0; i < *n; i++) {
+		vector[i] = pow(matrix[*n - 1 - i][i], 2);
+	}
+	cout << "\nVector elements of the lateral diagonal of the matrix: ";
+	for (int i = 0; i < *n; i++) {
+		cout << vector[i] << " ";
+	}
+	cout << endl;
+	return vector;
+}
+
+/**
+ * @brief Обчислює добуток парних елементів вектору
+ * @param vector Вектор сформований з матриці
+ * @param n Кількість елементів вектору
+*/
+void CalculateTheProductVectorPairedElements(double* vector, int* n) {
+	double product = 0;
+
+	for (int i = 1; i <= *n; i++) {
+		if (i % 2 == 0) {
+			if (i == 2) {
+				product = vector[i - 1];
+			}
+			else {
+				product *= vector[i - 1];
+			}			
+		}
+	}
+	cout << "The Product Vector Paired Elements: ";
+	cout << product << endl;;
+}
+
+/**
+ * @brief Очищення пам'яті, використаної у завданні В
+ * @param matrix Матриця для очищення
+ * @param vector Вектор для очищення
+ * @param n Кількість стовпців матриці
+*/
+void ClearMemory(double** matrix, double* vector, int* n) {
+
+	for (int i = 0; i < *n; i++) {
+		delete[] matrix[i];
+	}
+	delete[] matrix;
+	delete[] vector;
 }
 
 /**
@@ -69,7 +192,10 @@ int AmountOfAandB(int* a, int* b) {
  * @return Повертає сама себе для продовження роботи користувача з додатком
 */
 int MenuOfSolution(int* q) {
-	int x, y, sum;
+	int x, y, sum, n, m;
+	double** matrix;
+	double* vector;
+	pair <int, int> check;
 
 	switch (*q) {
 	case 1:
@@ -77,10 +203,10 @@ int MenuOfSolution(int* q) {
 		cout << "Enter x: ";
 		cin >> x;
 		x = CheckIntValue(&x);
+		x = FucntionOfSignA(&x);
 		cout << "\nEnter y: ";
 		cin >> y;
 		y = CheckIntValue(&y);
-		x = FucntionOfSignA(&x);
 		y = FucntionOfSignA(&y);
 		sum = AmountOfAandB(&x, &y);
 		cout << "\nSuma of sign x + sign y: ";
@@ -93,8 +219,17 @@ int MenuOfSolution(int* q) {
 		break;
 	case 3:
 		cout << "\n__Task C__\n";
-		cout << "Enter number of colums: ";
-		
+		cout << "Enter numbers of colums: ";
+		cin >> n;
+		n = CheckIntValue(&n);
+		m = n;
+		check = CheckMinMembersOfMatrix(&n, &m);
+		n = check.first;
+		m = n;
+		matrix = CreatedAndFillMatrix(&n, &m);
+		vector = ReturnVectorRaisedSquare(matrix, &n);
+		CalculateTheProductVectorPairedElements(vector, &n);
+		ClearMemory(matrix, vector, &n);
 		break;
 	case 4:
 		cout << "\n__Task D__\n";
@@ -116,7 +251,7 @@ int main() {
 	cout << "--------Select task:--------\n";
 	cout << "Task A) Fucntion Of Sign X + Sign Y - Enter 1\n";
 	cout << "Task B) Find the team goes second place - Enter 2\n";
-	cout << "Task C) Calculate Amount Of Abs Negative Elements - Enter 3\n";
+	cout << "Task C) Calculate The Product Vector Paired Elements - Enter 3\n";
 	cout << "Task D) Amount Sequence Members - Enter 4\n";
 	cout << "------------------------------------------------------------\n";
 	cin >> q;
