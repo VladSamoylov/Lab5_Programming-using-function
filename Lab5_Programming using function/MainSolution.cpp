@@ -44,18 +44,47 @@ float CheckFloatValue(float* i) {
 	}
 }
 
+int FucntionOfSignA(int* a) {
+
+	if (*a < 0) {
+		*a = -1;
+	}
+	else if (*a > 0) {
+		*a = 1;
+	}
+	else {
+		*a = 0;
+	}
+	return *a;
+}
+
+int AmountOfAandB(int* a, int* b) {
+
+	return *a + *b;
+}
+
 /**
  * @brief Інтерфейс який дає змогу користувачу працювати з додатком
  * @param q Вибір виконуваного завдання, яке задається користувачем з клавіатури
  * @return Повертає сама себе для продовження роботи користувача з додатком
 */
 int MenuOfSolution(int* q) {
+	int x, y, sum;
 
 	switch (*q) {
 	case 1:
 		cout << "\n__Task A__\n";
-		cout << "Enter amount members of masive A: ";
-		
+		cout << "Enter x: ";
+		cin >> x;
+		x = CheckIntValue(&x);
+		cout << "\nEnter y: ";
+		cin >> y;
+		y = CheckIntValue(&y);
+		x = FucntionOfSignA(&x);
+		y = FucntionOfSignA(&y);
+		sum = AmountOfAandB(&x, &y);
+		cout << "\nSuma of sign x + sign y: ";
+		cout << sum << endl;
 		break;
 	case 2:
 		cout << "\n__Task B__\n";
@@ -85,7 +114,7 @@ int main() {
 	cout << "\nCreated by Vladislav Samoilov / KNT - 223\n";
 
 	cout << "--------Select task:--------\n";
-	cout << "Task A) Fill masive A and created masive B - Enter 1\n";
+	cout << "Task A) Fucntion Of Sign X + Sign Y - Enter 1\n";
 	cout << "Task B) Find the team goes second place - Enter 2\n";
 	cout << "Task C) Calculate Amount Of Abs Negative Elements - Enter 3\n";
 	cout << "Task D) Amount Sequence Members - Enter 4\n";
