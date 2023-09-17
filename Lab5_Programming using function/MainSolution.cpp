@@ -67,6 +67,21 @@ pair<int, int> CheckMinMembersOfMatrix(int* n, int* m) {
 }
 
 /**
+ * @brief Перевіряє мінімальну кількість елементів, який повинен мати масив
+ * @param n Кількість елементів масиву введенна користувачем з клавіатури
+ * @return Повертає коректне значення кількості елементів масиву
+*/
+int CheckMinMembersOfMassive(int* n) {
+
+	if (*n <= 0) {
+		cout << "You enter wrong data! Please enter correct data (min members - 0): \n";
+		cin >> *n;
+		*n = CheckIntValue(&*n);
+	}
+	return *n;
+}
+
+/**
  * @brief Шукакає sign від числа заданого користувачем
  * @param a Число задане користувачем
  * @return Sign від числа а
@@ -186,6 +201,37 @@ void ClearMemory(double** matrix, double* vector, int* n) {
 	delete[] vector;
 }
 
+void PairHaveCommonDivisors(int* n) {
+	int* seq = new int[*n];
+
+	for (int i = 0; i < *n; i++) {
+		cout << "Enter elements of sequence #" << i + 1 << ": ";
+		cin >> seq[i];
+	}
+	for (int i = 0; i < *n - 1; i++) {
+		for (int j = 0; j < *n - 1; j++) {
+
+		}
+		cout << "First number: " << seq[i] << " | Second number: " << seq[i + 1] << endl;
+		int div = 0;
+		do {
+			if (seq[i] > seq[i + 1]) {
+				if (seq[i] % (seq[i + 1] - div) == 0 && seq[i + 1] % (seq[i + 1] - div) == 0) {
+					cout << "Common divisors: " << seq[i + 1] - div << endl;
+				}
+			}
+			else if (seq[i] < seq[i + 1]) {
+				if (seq[i + 1] % (seq[i] - div) == 0 && seq[i] % (seq[i] - div) == 0) {
+					cout << "Common divisors: " << seq[i] - div << endl;
+				}
+			}			
+			div++;
+			
+		} while (seq[i + 1] - div != 0 && seq[i] - div != 0);
+	}
+
+}
+
 /**
  * @brief Інтерфейс який дає змогу користувачу працювати з додатком
  * @param q Вибір виконуваного завдання, яке задається користувачем з клавіатури
@@ -214,7 +260,11 @@ int MenuOfSolution(int* q) {
 		break;
 	case 2:
 		cout << "\n__Task B__\n";
-		cout << "Enter amount of Teams: ";
+		cout << "Enter numbers of sequence: ";
+		cin >> n;
+		n = CheckIntValue(&n);
+		n = CheckMinMembersOfMassive(&n);
+		PairHaveCommonDivisors(&n);
 		
 		break;
 	case 3:
