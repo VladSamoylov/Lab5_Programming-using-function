@@ -201,7 +201,38 @@ void ClearMemory(double** matrix, double* vector, int* n) {
 	delete[] vector;
 }
 
-void PairHaveCommonDivisors(int* n) {
+/**
+ * @brief Визначає спільні дільники двох чисел
+ * @param a Перше число
+ * @param b Друге число
+*/
+void PairHaveCommonDivisors(int* a, int* b) {
+
+	cout << "\nFirst number: " << *a << " | Second number: " << *b << endl;
+	int div = 0;
+
+	cout << "Have common divisors:";
+	do {
+		if (*a > *b) {
+			if (*a % (*b - div) == 0 && *b % (*b - div) == 0) {
+				cout << " " << *b - div << "|";
+			}
+		}
+		else if (*a < *b) {
+			if (*b % (*a - div) == 0 && *a % (*a - div) == 0) {
+				cout << " " << *a - div << "|";
+			}
+		}
+		div++;
+	} while (*b - div != 0 && *a - div != 0);
+	cout << endl;
+}
+
+/**
+ * @brief Створює послідовність введених з клавіатури чисел
+ * @param n Кількість членів послідовності
+*/
+void TaskBSolution(int* n) {
 	int* seq = new int[*n];
 
 	for (int i = 0; i < *n; i++) {
@@ -210,25 +241,10 @@ void PairHaveCommonDivisors(int* n) {
 	}
 	for (int i = 0; i < *n - 1; i++) {
 		for (int j = 1 + i; j < *n; j++) {
-			cout << "First number: " << seq[i] << " | Second number: " << seq[j] << endl;
-			int div = 0;
-			do {
-				if (seq[i] > seq[j]) {
-					if (seq[i] % (seq[j] - div) == 0 && seq[j] % (seq[j] - div) == 0) {
-						cout << "Common divisors: " << seq[j] - div << endl;
-					}
-				}
-				else if (seq[i] < seq[j]) {
-					if (seq[j] % (seq[i] - div) == 0 && seq[i] % (seq[i] - div) == 0) {
-						cout << "Common divisors: " << seq[i] - div << endl;
-					}
-				}
-				div++;
-
-			} while (seq[j] - div != 0 && seq[i] - div != 0);
+			PairHaveCommonDivisors(&seq[i], &seq[j]);
 		}		
 	}
-
+	delete[] seq;
 }
 
 /**
@@ -291,8 +307,7 @@ int MenuOfSolution(int* q) {
 		cin >> n;
 		n = CheckIntValue(&n);
 		n = CheckMinMembersOfMassive(&n);
-		PairHaveCommonDivisors(&n);
-		
+		TaskBSolution(&n);		
 		break;
 	case 3:
 		cout << "\n__Task C__\n";
@@ -336,9 +351,9 @@ int main() {
 
 	cout << "--------Select task:--------\n";
 	cout << "Task A) Fucntion Of Sign X + Sign Y - Enter 1\n";
-	cout << "Task B) Find the team goes second place - Enter 2\n";
+	cout << "Task B) Find Pair Common Divisors - Enter 2\n";
 	cout << "Task C) Calculate The Product Vector Paired Elements - Enter 3\n";
-	cout << "Task D) Amount Sequence Members - Enter 4\n";
+	cout << "Task D) Find n progression - Enter 4\n";
 	cout << "------------------------------------------------------------\n";
 	cin >> q;
 	q = CheckIntValue(&q);
