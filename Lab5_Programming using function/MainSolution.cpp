@@ -209,27 +209,54 @@ void PairHaveCommonDivisors(int* n) {
 		cin >> seq[i];
 	}
 	for (int i = 0; i < *n - 1; i++) {
-		for (int j = 0; j < *n - 1; j++) {
+		for (int j = 1 + i; j < *n; j++) {
+			cout << "First number: " << seq[i] << " | Second number: " << seq[j] << endl;
+			int div = 0;
+			do {
+				if (seq[i] > seq[j]) {
+					if (seq[i] % (seq[j] - div) == 0 && seq[j] % (seq[j] - div) == 0) {
+						cout << "Common divisors: " << seq[j] - div << endl;
+					}
+				}
+				else if (seq[i] < seq[j]) {
+					if (seq[j] % (seq[i] - div) == 0 && seq[i] % (seq[i] - div) == 0) {
+						cout << "Common divisors: " << seq[i] - div << endl;
+					}
+				}
+				div++;
 
-		}
-		cout << "First number: " << seq[i] << " | Second number: " << seq[i + 1] << endl;
-		int div = 0;
-		do {
-			if (seq[i] > seq[i + 1]) {
-				if (seq[i] % (seq[i + 1] - div) == 0 && seq[i + 1] % (seq[i + 1] - div) == 0) {
-					cout << "Common divisors: " << seq[i + 1] - div << endl;
-				}
-			}
-			else if (seq[i] < seq[i + 1]) {
-				if (seq[i + 1] % (seq[i] - div) == 0 && seq[i] % (seq[i] - div) == 0) {
-					cout << "Common divisors: " << seq[i] - div << endl;
-				}
-			}			
-			div++;
-			
-		} while (seq[i + 1] - div != 0 && seq[i] - div != 0);
+			} while (seq[j] - div != 0 && seq[i] - div != 0);
+		}		
 	}
 
+}
+
+/**
+ * @brief Знаходить n член арифметичної прогресії
+ * @param member Член прогресії
+ * @param dif Різниця арифметичної прогреції
+ * @return Сама себе для знаходження наступного члена прогресії
+*/
+int RecursiveForFindingTheNTermOfProgression(int* member, int* dif) {
+
+	return *member + *dif;
+}
+
+/**
+ * @brief Розв'язує завдання г
+ * @param first_member Перший член арифметичної прогресії.
+ * @param dif Різниця арифметичної прогрегресії
+ * @param n Член арифметичної прогреції для знаходження
+*/
+void SolutioOfTaskG(int* first_member, int* dif, int* n) {
+	int i = 1, s_member;
+
+	s_member = *first_member;
+	while (*n != i) {
+		s_member = RecursiveForFindingTheNTermOfProgression(&s_member, *&dif);
+		i++;
+	}
+	cout << "\nThe " << *n << " Term Of Progression is: " << s_member << endl;
 }
 
 /**
@@ -238,7 +265,7 @@ void PairHaveCommonDivisors(int* n) {
  * @return Повертає сама себе для продовження роботи користувача з додатком
 */
 int MenuOfSolution(int* q) {
-	int x, y, sum, n, m;
+	int x, y, sum, n, m, dif;
 	double** matrix;
 	double* vector;
 	pair <int, int> check;
@@ -283,8 +310,17 @@ int MenuOfSolution(int* q) {
 		break;
 	case 4:
 		cout << "\n__Task D__\n";
-		cout << "Enter number of colums: ";
-		
+		cout << "Enter the first term of the arithmetic progression: ";
+		cin >> x;
+		x = CheckIntValue(&x);
+		cout << "\nEnter difference of arithmetic progression: ";
+		cin >> dif;
+		dif = CheckIntValue(&dif);
+		cout << "\nEnter search n member of the progression: ";
+		cin >> n;
+		n = CheckIntValue(&n);
+		n = CheckMinMembersOfMassive(&n);
+		SolutioOfTaskG(&x, &dif, &n);		
 		break;
 	default:
 		cout << "\n__You don't enter any task for execution__\n";
