@@ -1,5 +1,6 @@
 #include "iostream"
 #include "math.h"
+#include <iomanip>
 
 using namespace std;
 
@@ -137,7 +138,7 @@ double** CreatedAndFillMatrix(int* n, int* m) {
 	cout << "Matrix: \n";
 	for (int i = 0; i < *n; i++) {
 		for (int j = 0; j < *m; j++) {
-			cout << matrix[i][j] << '|';
+			cout << setw(10) << matrix[i][j];
 		}
 		cout << endl;
 	}
@@ -253,9 +254,14 @@ void TaskBSolution(int* n) {
  * @param dif Різниця арифметичної прогреції
  * @return Сама себе для знаходження наступного члена прогресії
 */
-int RecursiveForFindingTheNTermOfProgression(int* member, int* dif) {
-
-	return *member + *dif;
+int RecursiveForFindingTheNTermOfProgression(int* member, int* dif, int n) {
+	if (n == 1) {
+		return *member;
+	}
+	else {
+		*member += *dif;
+		return RecursiveForFindingTheNTermOfProgression(*&member, *&dif, n - 1);
+	}	
 }
 
 /**
@@ -265,13 +271,9 @@ int RecursiveForFindingTheNTermOfProgression(int* member, int* dif) {
  * @param n Член арифметичної прогреції для знаходження
 */
 void SolutioOfTaskG(int* first_member, int* dif, int* n) {
-	int i = 1, s_member;
+	int s_member;
 
-	s_member = *first_member;
-	while (*n != i) {
-		s_member = RecursiveForFindingTheNTermOfProgression(&s_member, *&dif);
-		i++;
-	}
+	s_member = RecursiveForFindingTheNTermOfProgression(*&first_member, *&dif, *n);
 	cout << "\nThe " << *n << " Term Of Progression is: " << s_member << endl;
 }
 
